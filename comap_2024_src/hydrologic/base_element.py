@@ -1,4 +1,4 @@
-
+import types
 
 class Lake:
     def __init__(self, name, area, base_height) -> None:
@@ -10,8 +10,8 @@ class Lake:
         # var
         self.water_level = base_height
         self.best_water_level = base_height
-        self.inflow = []
-        self.outflow = []
+        self.inflow: list[River]= []
+        self.outflow: list[River] = []
 
     def add_water(self, amount):
         self.water_level += amount / self.area
@@ -42,8 +42,8 @@ class River:
         self.best_flow = flow
 
         
-        self.upstream_lake = [] # 上游湖泊
-        self.downstream_lake = []  # 下游湖泊
+        self.upstream_lake : list[Lake] = [] # 上游湖泊
+        self.downstream_lake :list[Lake]= []  # 下游湖泊
 
     def set_flow(self, flow) -> None:
         self.flow = flow
