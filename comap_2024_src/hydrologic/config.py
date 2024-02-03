@@ -3,7 +3,8 @@ from hydrologic.base_element import Lake, River
 class Config:
     def __init__(self) -> None:     
         # The following are the names of the rivers and lakes in the Great Lakes system
-        lakes_name = ["clair", "erie", "miHuron", "ontario", "superior"]
+        # high to low, lakes_name = ["clair", "erie", "miHuron", "ontario", "superior"]
+        lakes_name = ["superior", "miHuron", "erie", "clair", "ontario"]
         rivers_name = ["detroit", "niagara", "stClair", "stMarys", "stLawrence"]
 
         # The following are the areas of the lakes in the Great Lakes system
@@ -17,20 +18,20 @@ class Config:
         lakes["superior"].set_area(82100 * (1000**2))
 
         # base_height
-        lakes["clair"].set_base_height(175.5)
-        lakes["erie"].set_base_height(174)
-        lakes["miHuron"].set_base_height(176.5)
-        lakes["ontario"].set_base_height(74.5)
-        lakes["superior"].set_base_height(183.5)
+        lakes["clair"].init_base_height(175.5)
+        lakes["erie"].init_base_height(174)
+        lakes["miHuron"].init_base_height(176.5)
+        lakes["ontario"].init_base_height(74.5)
+        lakes["superior"].init_base_height(183.5)
 
         rivers = {rivers_name[i]: River(rivers_name[i], 0) for i in range(len(rivers_name))}
 
         # flows of the rivers
-        rivers["detroit"].set_flow(1900)   
-        rivers["niagara"].set_flow(6000)
-        rivers["stClair"].set_flow(1820)
-        rivers["stMarys"].set_flow(10000)
-        rivers["stLawrence"].set_flow(10300)
+        rivers["detroit"].set_new_base(1900, 460)   
+        rivers["niagara"].set_new_base(6000, 460)
+        rivers["stClair"].set_new_base(1820, 460)
+        rivers["stMarys"].set_new_base(10000, 460)
+        rivers["stLawrence"].set_new_base(10300, 460)
 
         # connect the rivers and lakes
         lakes["superior"].append_outflow(rivers["stMarys"])

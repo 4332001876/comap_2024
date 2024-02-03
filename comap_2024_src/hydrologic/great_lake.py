@@ -10,7 +10,7 @@ class GreatLake:
     def __init__(self) -> None:
         self.config = Config()
         self.lakes: dict[str, Lake] = self.config.lakes
-        self.rivers: dict[str, Lake] = self.config.rivers
+        self.rivers: dict[str, River] = self.config.rivers
 
         self.dt = 60 * 60 * 3 # 3 hours
         
@@ -31,10 +31,14 @@ class GreatLake:
             lake.add_water(amount)
 
     def update_rivers(self):
-        pass
+        for river in self.rivers.values():
+            river.calc_flow(self.dt)
 
     def __str__(self) -> str:
-        return str(self.lakes)
+        description = ""
+        for lake_name in self.config.lakes_name:
+            description += str(self.lakes[lake_name]) + ", "
+        return description[:-2]
     
     def __repr__(self) -> str:
         return self.__str__()
