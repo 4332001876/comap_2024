@@ -10,27 +10,27 @@ class Config:
         lakes = {lakes_name[i]: Lake(lakes_name[i], 0, 0) for i in range(len(lakes_name))}
 
         # area
-        lakes["clair"].area = 1114 * (1000**2)
-        lakes["erie"].area = 25700 * (1000**2)
-        lakes["miHuron"].area = 117620 * (1000**2)
-        lakes["ontario"].area = 18970 * (1000**2)
-        lakes["superior"].area = 82100 * (1000**2)
+        lakes["clair"].set_area(1114 * (1000**2))
+        lakes["erie"].set_area(25700 * (1000**2))
+        lakes["miHuron"].set_area(117620 * (1000**2))
+        lakes["ontario"].set_area(18970 * (1000**2))
+        lakes["superior"].set_area(82100 * (1000**2))
 
         # base_height
-        lakes["clair"].base_height = 175.5
-        lakes["erie"].base_height = 174
-        lakes["miHuron"].base_height = 176.5
-        lakes["ontario"].base_height = 74.5
-        lakes["superior"].base_height = 183.5
+        lakes["clair"].set_base_height(175.5)
+        lakes["erie"].set_base_height(174)
+        lakes["miHuron"].set_base_height(176.5)
+        lakes["ontario"].set_base_height(74.5)
+        lakes["superior"].set_base_height(183.5)
 
         rivers = {rivers_name[i]: River(rivers_name[i], 0) for i in range(len(rivers_name))}
 
         # flows of the rivers
-        rivers["detroit"].flow = 1900   
-        rivers["niagara"].flow = 6000
-        rivers["stClair"].flow = 1820
-        rivers["stMarys"].flow = 10000
-        rivers["stLawrence"].flow = 10300
+        rivers["detroit"].set_flow(1900)   
+        rivers["niagara"].set_flow(6000)
+        rivers["stClair"].set_flow(1820)
+        rivers["stMarys"].set_flow(10000)
+        rivers["stLawrence"].set_flow(10300)
 
         # connect the rivers and lakes
         lakes["superior"].append_outflow(rivers["stMarys"])
@@ -59,6 +59,12 @@ class Config:
 
         lakes["ontario"].append_outflow(rivers["stLawrence"])
         rivers["stLawrence"].append_upstream_lake(lakes["ontario"])
+
+        self.lakes = lakes
+        self.rivers = rivers
+
+        self.lakes_name = lakes_name
+        self.rivers_name = rivers_name
 
     def get_lakes(self):
         return self.lakes

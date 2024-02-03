@@ -22,6 +22,16 @@ class Lake:
     def append_outflow(self, river):
         self.outflow.append(river)
 
+
+    # setter
+    def set_base_height(self, base_height) -> None:
+        self.base_height = base_height
+        self.water_level = base_height
+        self.best_water_level = base_height
+
+    def set_area(self, area) -> None:
+        self.area = area
+
     def set_best_water_level(self, water_level) -> None:
         self.best_water_level = water_level
 

@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from comap_2024_src.hydrologic.config import Config
-from comap_2024_src.hydrologic.base_element import Lake, River
+from hydrologic.config import Config
+from hydrologic.base_element import Lake, River
 
 import types
 
