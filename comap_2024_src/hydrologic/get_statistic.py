@@ -95,8 +95,8 @@ def get_NBS_stat():
             NBS_stat[month] = {"mean": np.mean(data), "std": np.std(data)}
         json_dict[lake_name]["NBS"] = NBS_stat
 
-    with open(nbs_json_path, "w") as f:
-        json.dump(json_dict, f)
+    """with open(nbs_json_path, "w") as f:
+        json.dump(json_dict, f)"""
 
     
 

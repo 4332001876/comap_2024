@@ -11,16 +11,20 @@ def test_great_lake():
         gl.run(48)
         print(gl.date.ctime())
         print(gl)
+    print("MSE Loss at", gl.date.ctime(), ":", gl.calc_mse_loss())
 
-def test_mcp():
+def test_mpc():
     gl = GreatLake()
-    mcp = MpcController(gl)
-    mcp.run(100)
+    mpc = MpcController(gl)
+    mpc.run(48)
+    print("MSE Loss at", gl.date.ctime(), ":", gl.calc_mse_loss())
 
 def test_get_stat():
     #get_stat()
     get_NBS_stat()
 
 if __name__ == "__main__":
-    test_get_stat()
-    # test_great_lake()
+    # test_get_stat()
+    test_great_lake()
+    # test_mpc()
+

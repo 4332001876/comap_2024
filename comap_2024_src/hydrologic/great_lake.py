@@ -28,22 +28,26 @@ class GreatLake:
     def start_new_month(self, month: int):
         month = str(month)
         stat = json.load(open(self.config.path_config.stat_path))
+        nbs_stat = json.load(open(self.config.path_config.nbs_stat_path))
         for lake in self.lakes.values():
             base_height = stat[lake.name]["water_level"][month]["mean"]
             std = stat[lake.name]["water_level"][month]["std"]
-            lake.set_new_base(base_height, std)
+            nbs_mean = nbs_stat[lake.name]["NBS"][month]["mean"]
+            nbs_std = nbs_stat[lake.name]["NBS"][month]["std"]
+            lake.set_new_base(base_height, std, nbs_mean, nbs_std)
             lake.set_best_water_level(base_height)
         for river in self.rivers.values():
             base_flow = stat[river.name]["flow"][month]["mean"]
             std_flow = stat[river.name]["flow"][month]["std"]
             river.set_new_base(base_flow, std_flow)
         
-    def run(self, steps, dam_action: dict[str, int] = {}):
+    def run(self, steps, dam_action: dict[str, float] = {}):
         for i in range(steps):
             self.update_rivers()
             for dam_name, action in dam_action.items():
                 self.dam_controller[dam_name].set_action(action)
             self.update_lakes()
+            
             self.date += datetime.timedelta(seconds=self.dt)
             if self.date.month != self.month:
                 self.month = self.date.month
@@ -57,13 +61,13 @@ class GreatLake:
 
     def update_lakes(self):
         for lake in self.lakes.values():
-            flow = 0
+            change_rate = 0
             for river in lake.inflow:
-                flow += river.flow
+                change_rate += river.flow
             for river in lake.outflow:
-                flow -= river.flow
-
-            amount = flow * self.dt
+                change_rate -= river.flow
+            change_rate += lake.nbs_mean + lake.nbs_std * np.random.normal()
+            amount = change_rate * self.dt
             lake.add_water(amount)
 
     def update_rivers(self):

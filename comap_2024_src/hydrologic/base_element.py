@@ -4,12 +4,15 @@ from typing import Any
 import numpy as np
 
 class Lake:
-    def __init__(self, name, area = None, base_height = None, std = None) -> None:
+    def __init__(self, name, area = None, base_height = None, std = None, nbs_mean = None, nbs_std = None) -> None:
         # const
         self.name = name
         self.area = area
         self.base_height = base_height
         self.std = std
+
+        self.nbs_mean = nbs_mean
+        self.nbs_std = nbs_std
 
         # var
         self.water_level = base_height
@@ -32,9 +35,11 @@ class Lake:
     # getter
 
     # setter
-    def set_new_base(self, base_height, std) -> None:
+    def set_new_base(self, base_height, std, nbs_mean, nbs_std) -> None:
         self.base_height = base_height
         self.std = std
+        self.nbs_mean = nbs_mean
+        self.nbs_std = nbs_std
         if self.water_level is None:
             self.water_level = base_height
             self.best_water_level = base_height
