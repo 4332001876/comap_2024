@@ -1,5 +1,5 @@
 from hydrologic.great_lake import GreatLake
-from hydrologic.get_statistic import get_stat
+from hydrologic.get_statistic import get_stat, get_NBS_stat
 
 
 from cybernetic.mpc import MpcController
@@ -18,8 +18,9 @@ def test_mcp():
     mcp.run(100)
 
 def test_get_stat():
-    get_stat()
+    #get_stat()
+    get_NBS_stat()
 
 if __name__ == "__main__":
-    # test_get_stat()
-    test_great_lake()
+    test_get_stat()
+    # test_great_lake()

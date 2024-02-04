@@ -10,12 +10,14 @@ class Config:
         # The following are the areas of the lakes in the Great Lakes system
         lakes = {lakes_name[i]: Lake(lakes_name[i]) for i in range(len(lakes_name))}
 
-        # area
+        # area (from wiki)
         lakes["clair"].set_area(1114 * (1000**2))
         lakes["erie"].set_area(25700 * (1000**2))
         lakes["miHuron"].set_area(117620 * (1000**2))
         lakes["ontario"].set_area(18970 * (1000**2))
         lakes["superior"].set_area(82100 * (1000**2))
+
+        # geogian bay: 15000 km^2; huron: 59590 km^2; huron without geogian bay: 44590 km^2; michigan: 58030 km^2
 
         rivers = {rivers_name[i]: River(rivers_name[i]) for i in range(len(rivers_name))}
 
@@ -68,6 +70,7 @@ class PathConfig:
         self.model_path = "model/"
 
         self.stat_path = "data/stat.json"
+        self.nbs_stat_path = "data/nbs_stat.json"
     
     
 
