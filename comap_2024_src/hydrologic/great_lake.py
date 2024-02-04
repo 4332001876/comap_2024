@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from hydrologic.config import Config
-from hydrologic.base_element import Lake, River
+from hydrologic.base_element import Lake, River, DamController, MosesSaunders, CompensatingWorks
 
 import types
 
@@ -11,6 +11,11 @@ class GreatLake:
         self.config = Config()
         self.lakes: dict[str, Lake] = self.config.lakes
         self.rivers: dict[str, River] = self.config.rivers
+
+        self.dam_controller = {
+            "stMarys": CompensatingWorks(self.rivers["stMarys"]), 
+            "stLawrence": MosesSaunders(self.rivers["stLawrence"]),
+        }
 
         self.dt = 60 * 60 * 3 # 3 hours
         
