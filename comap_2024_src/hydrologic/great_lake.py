@@ -17,12 +17,20 @@ class GreatLake:
             "stLawrence": MosesSaunders(self.rivers["stLawrence"]),
         }
 
-        self.dt = 60 * 60 * 3 # 3 hours
+        self.dt = 60 * 30 # 0.5 hours
         
-    def run(self, steps):
+    def run(self, steps, dam_action: dict[str, int] = {}):
         for i in range(steps):
             self.update_rivers()
+            for dam_name, action in dam_action.items():
+                self.dam_controller[dam_name].set_action(action)
             self.update_lakes()
+
+    def calc_mse_loss(self):
+        mse_loss = 0
+        for lake in self.lakes.values():
+            mse_loss += (lake.water_level - lake.best_water_level) ** 2
+        return mse_loss
 
     def update_lakes(self):
         for lake in self.lakes.values():
@@ -37,7 +45,7 @@ class GreatLake:
 
     def update_rivers(self):
         for river in self.rivers.values():
-            river.calc_flow(self.dt)
+            river.calc_flow()
 
     def __str__(self) -> str:
         description = ""

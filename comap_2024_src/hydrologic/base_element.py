@@ -71,10 +71,18 @@ class River:
         self.upstream_lake : list[Lake] = [] # 上游湖泊
         self.downstream_lake :list[Lake]= []  # 下游湖泊
 
-    def calc_flow(self, flow) -> None:
+    def calc_flow(self) -> None:
         if len(self.upstream_lake) == 0:
-            self.flow = flow + np.random.normal(0, self.std)
-        self.flow = self.base_flow + self.std * self.upstream_lake[0].get_normalized_water_level()
+            self.flow = self.base_flow + np.random.normal(0, self.std)
+            return
+        
+        high = self.upstream_lake[0].get_normalized_water_level()
+        if len(self.downstream_lake) == 0:
+            low = 0
+        else:
+            low = self.downstream_lake[0].get_normalized_water_level()
+
+        self.flow = self.base_flow + self.std * (high - low)
 
     def set_new_base(self, flow, std) -> None:
         self.base_flow = flow
@@ -125,10 +133,10 @@ class DamController:
 
         return legal_action
 
-    def control(self, flow):
+    def set_action(self, flow):
         max_limit = self.get_max_limit()
         min_limit = self.get_min_limit()
-        if (flow-max_limit)*(flow-min_limit) < 0:
+        if (flow-max_limit)*(flow-min_limit) <= 1e-6:
             self.river.set_flow(flow)
 
 
