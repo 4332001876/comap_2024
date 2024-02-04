@@ -7,8 +7,9 @@ from cybernetic.mpc import MpcController
 def test_great_lake():
     gl = GreatLake()
     print(gl)
-    for _ in range(1):
-        gl.run(100)
+    for _ in range(365):
+        gl.run(48)
+        print(gl.date.ctime())
         print(gl)
 
 def test_mcp():
@@ -20,4 +21,5 @@ def test_get_stat():
     get_stat()
 
 if __name__ == "__main__":
-    test_get_stat()
+    # test_get_stat()
+    test_great_lake()

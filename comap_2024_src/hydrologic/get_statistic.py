@@ -8,7 +8,7 @@ config = Config()
 lakes_name = config.lakes_name
 rivers_name = config.rivers_name
 
-json_path = "data/stat.json"
+json_path = config.path_config.stat_path
 json_dict = {}
 
 def get_stat():
@@ -30,8 +30,8 @@ def get_stat():
         print(water_level_stat)
         json_dict[lake_name]["water_level"] = water_level_stat
 
-    with open(json_path, "w") as f:
-        json.dump(json_dict, f)
+    """with open(json_path, "w") as f:
+        json.dump(json_dict, f)"""
 
     
 

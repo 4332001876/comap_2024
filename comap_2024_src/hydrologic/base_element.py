@@ -4,7 +4,7 @@ from typing import Any
 import numpy as np
 
 class Lake:
-    def __init__(self, name, area, base_height, std = 0.15) -> None:
+    def __init__(self, name, area = None, base_height = None, std = None) -> None:
         # const
         self.name = name
         self.area = area
@@ -32,14 +32,12 @@ class Lake:
     # getter
 
     # setter
-    def init_base_height(self, base_height) -> None:
-        self.base_height = base_height
-        self.water_level = base_height
-        self.best_water_level = base_height
-
     def set_new_base(self, base_height, std) -> None:
         self.base_height = base_height
         self.std = std
+        if self.water_level is None:
+            self.water_level = base_height
+            self.best_water_level = base_height
 
     def set_area(self, area) -> None:
         self.area = area
@@ -56,7 +54,7 @@ class Lake:
 
 
 class River:
-    def __init__(self, name, flow, std=500) -> None:
+    def __init__(self, name, flow=None, std=None) -> None:
         # const
         self.name = name
 
