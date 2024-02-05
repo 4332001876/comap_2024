@@ -25,7 +25,9 @@ class GreatLake:
 
         self.dt = 60 * 30 # s, 0.5 hours
         self.daily_discount_rate = 0.5
-        self.dt_nbs_std_factor = np.sqrt(30 * np.log(1 / self.daily_discount_rate)) * (self.dt / 86400) * np.log(1 / self.daily_discount_rate)
+        # self.dt_nbs_std_factor = np.sqrt(30 * np.log(1 / self.daily_discount_rate)) * (self.dt / 86400) * np.log(1 / self.daily_discount_rate)
+        self.dt_nbs_std_factor = np.sqrt(30 * (86400 / self.dt))
+        self.alpha = self.daily_discount_rate ** (86400 / self.dt)
 
     def start_new_month(self, month: int):
         month = str(month)
@@ -69,8 +71,7 @@ class GreatLake:
             for river in lake.outflow:
                 change_rate -= river.flow
             new_nbs = lake.nbs_mean + lake.nbs_std * self.dt_nbs_std_factor * np.random.normal() 
-            alpha = self.daily_discount_rate ** (86400 / self.dt)
-            lake.last_nbs = alpha * lake.last_nbs + (1 - alpha) * new_nbs
+            lake.last_nbs = self.alpha * lake.last_nbs + (1 - self.alpha) * new_nbs
             # print(lake.last_nbs)
             change_rate += lake.last_nbs
             amount = change_rate * self.dt
@@ -78,7 +79,7 @@ class GreatLake:
 
     def update_rivers(self):
         for river in self.rivers.values():
-            river.calc_flow()
+            river.calc_flow(self.alpha, self.dt_nbs_std_factor)
 
     def __str__(self) -> str:
         description = ""

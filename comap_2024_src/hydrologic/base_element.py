@@ -71,15 +71,20 @@ class River:
         self.std = std
         self.base_flow = flow
 
+        self.last_flow = flow
+
         # self.reservoir_limit = 0
         # self.reservoir_water = 0
         
         self.upstream_lake : list[Lake] = [] # 上游湖泊
         self.downstream_lake :list[Lake]= []  # 下游湖泊
 
-    def calc_flow(self) -> None:
+    def calc_flow(self, ewm_alpha, std_factor) -> None:
+        if self.last_flow is None:
+            self.last_flow = self.base_flow
+            
         if len(self.upstream_lake) == 0:
-            self.flow = self.base_flow + np.random.normal(0, self.std)
+            self.flow = ewm_alpha * self.base_flow + np.random.normal(0, self.std * std_factor) * (1 - ewm_alpha)
             return
         
         high = self.upstream_lake[0].get_normalized_water_level()
@@ -90,12 +95,16 @@ class River:
 
         self.flow = self.base_flow + self.std * (high - low) / np.sqrt(2)
 
+        self.last_flow = self.flow
+
+
     def set_new_base(self, flow, std) -> None:
         self.base_flow = flow
         self.std = std
 
     def set_flow(self, flow) -> None:
         self.flow = flow
+        self.last_flow = self.flow
 
     def append_upstream_lake(self, lake):
         self.upstream_lake.append(lake)
@@ -129,17 +138,18 @@ class DamController:
         """
 
     def get_legal_action(self, dt):
-        if self.river.flow is not None:
-            self.last_flow = self.river.flow
-        else:
-            self.last_flow = self.river.base_flow
-
         change_rate_limit = self.get_change_rate_limit()
         max_limit = self.get_max_limit()
         min_limit = self.get_min_limit()
 
         change = change_rate_limit * (2 * dt / (7 * 86400))
-        possible_action = [self.last_flow + change * i for i in range(-1,2)]
+
+        if self.river.last_flow is None:
+            last_flow = self.river.base_flow
+        else:
+            last_flow = self.river.last_flow
+
+        possible_action = [last_flow + change * i for i in range(-1,2)]
         if max_limit >= min_limit:
             legal_action = []
             for action in possible_action:
@@ -149,7 +159,7 @@ class DamController:
             legal_action = possible_action
 
         if len(legal_action) == 0:
-            legal_action = [self.last_flow]
+            legal_action = [last_flow]
 
         """if max_limit >= min_limit:
             legal_action = np.linspace(min_limit, max_limit, self.legal_action_num)
