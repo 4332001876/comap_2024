@@ -27,7 +27,9 @@ class GreatLake:
         self.daily_discount_rate = 0.5
         # self.dt_nbs_std_factor = np.sqrt(30 * np.log(1 / self.daily_discount_rate)) * (self.dt / 86400) * np.log(1 / self.daily_discount_rate)
         self.dt_nbs_std_factor = np.sqrt(30 * (86400 / self.dt))
-        self.alpha = self.daily_discount_rate ** (86400 / self.dt)
+        self.alpha = self.daily_discount_rate ** (self.dt /86400)
+        # print("alpha: ", self.alpha)
+        # print("dt_nbs_std_factor: ", self.dt_nbs_std_factor)
 
     def start_new_month(self, month: int):
         month = str(month)

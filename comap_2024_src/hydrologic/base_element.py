@@ -84,7 +84,7 @@ class River:
             self.last_flow = self.base_flow
             
         if len(self.upstream_lake) == 0:
-            self.flow = ewm_alpha * self.base_flow + np.random.normal(0, self.std * std_factor) * (1 - ewm_alpha)
+            self.flow = ewm_alpha * self.base_flow + np.random.normal(self.base_flow, self.std * std_factor) * (1 - ewm_alpha)
             return
         
         high = self.upstream_lake[0].get_normalized_water_level()
@@ -142,14 +142,14 @@ class DamController:
         max_limit = self.get_max_limit()
         min_limit = self.get_min_limit()
 
-        change = change_rate_limit * (2 * dt / (7 * 86400))
+        change = change_rate_limit * (24 * dt / (7 * 86400))
 
         if self.river.last_flow is None:
             last_flow = self.river.base_flow
         else:
             last_flow = self.river.last_flow
 
-        possible_action = [last_flow + change * i for i in range(-1,2)]
+        possible_action = [last_flow + change * i for i in [-1, -0.25 * np.sqrt(2), 0, 0.25 * np.sqrt(2), 1]]
         if max_limit >= min_limit:
             legal_action = []
             for action in possible_action:

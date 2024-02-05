@@ -8,16 +8,18 @@ from cybernetic.mpc import MpcController
 def test_great_lake():
     gl = GreatLake()
     print(gl)
-    for _ in range(10):
+    for _ in range(36500):
         gl.run(48)
-        print(gl.date.ctime())
-        print(gl)
+        # print(gl.date.ctime())
+        # print(gl)
+    print(gl.date.ctime())
+    print(gl)
     print("MSE Loss at", gl.date.ctime(), ":", gl.calc_mse_loss())
 
 def test_mpc():
     gl = GreatLake()
     mpc = MpcController(gl)
-    mpc.run(480)
+    mpc.run(48*365)
     print("MSE Loss at", gl.date.ctime(), ":", gl.calc_mse_loss())
 
 def test_get_stat():
@@ -28,5 +30,5 @@ def test_get_stat():
 if __name__ == "__main__":
     # test_get_stat()
     test_great_lake()
-    test_mpc()
+    # test_mpc()
 

@@ -26,6 +26,7 @@ class MpcController:
                 if loss < best_loss:
                     best_loss = loss
                     best_action = (action1, action2)
+                    # print(loss, action1, action2)
         best_action = {dam_name: action for dam_name, action in zip(self.great_lake.dam_controller.keys(), best_action)}
         # print(best_action)
         self.great_lake.run(1, best_action)
@@ -33,8 +34,10 @@ class MpcController:
     def run(self, steps):
         for i in range(steps):
             self.run_one_step()
-            if i % 100 == 99:
+            log_interval = 48
+            if i % log_interval == log_interval - 1:
                 print(self.great_lake)
+                print("MSE Loss at", self.great_lake.date.ctime(), ":", self.great_lake.calc_mse_loss())
             gc.collect()
         print("MPC finished")
         print(self.great_lake.date.ctime())
