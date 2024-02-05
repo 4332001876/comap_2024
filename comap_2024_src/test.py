@@ -24,7 +24,7 @@ def test_get_stat():
     get_NBS_stat()
 
 if __name__ == "__main__":
-    # test_get_stat()
-    test_great_lake()
+    test_get_stat()
+    # test_great_lake()
     # test_mpc()
 

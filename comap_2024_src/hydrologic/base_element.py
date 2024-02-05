@@ -13,6 +13,7 @@ class Lake:
 
         self.nbs_mean = nbs_mean
         self.nbs_std = nbs_std
+        self.last_nbs = None
 
         # var
         self.water_level = base_height
@@ -43,6 +44,8 @@ class Lake:
         if self.water_level is None:
             self.water_level = base_height
             self.best_water_level = base_height
+        if self.last_nbs is None:
+            self.last_nbs = nbs_mean + nbs_std * np.random.normal()
 
     def set_area(self, area) -> None:
         self.area = area

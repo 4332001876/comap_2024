@@ -88,6 +88,14 @@ def get_NBS_stat():
             NBS -= river_dict[river.name]
         for river in lake.outflow:
             NBS += river_dict[river.name]
+
+        '''
+        # pearson-correlation-coefficient
+        x = NBS[:-1]
+        y = NBS[1:]
+        pearson = np.corrcoef(x, y)
+        print(lake_name + " pearson-correlation-coefficient: ", pearson)
+        '''
         
         month_data = {i+1:[NBS[j*12+i] for j in range(8)] for i in range(12)}
         NBS_stat = {}
