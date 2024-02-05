@@ -14,6 +14,34 @@ gl = GreatLake()
 
 json_path = config.path_config.stat_path
 nbs_json_path = config.path_config.nbs_stat_path
+json_2017_path = "data/flow_2017.json"
+
+def get_2017_flow_nbs():
+    average_flow = {}
+    with open(json_path, "r") as f:
+        average_flow = json.load(f)
+
+    json_dict = {}
+    for river_name in rivers_name:
+        # get_flow
+        json_dict[river_name] = {}
+        path = "data/" + river_name + "/%s_flow.csv"%river_name
+        flow_df, flow_stat = read_csv_type_month(path)
+        flow_2017 = flow_df[flow_df["Year"] == 2017].values.flatten()[1:]
+
+        month_stat = {}
+        for i in range(12):
+            month_stat[i+1] = {"mean": flow_2017[i], "std": average_flow[river_name]["flow"][str(i+1)]["std"]}
+
+        json_dict[river_name]["flow"] = month_stat
+        print(river_name+" flow_2017: ", flow_2017)
+    print(json_dict)
+    """with open(json_2017_path, "w") as f:
+        json.dump(json_dict, f)"""
+    
+def get_2017_ontario():
+    df = pd.read_csv(r"D:\Python\Competition\COMAP\references\D\Water Level Controlling\ontario_2017_daily.csv")
+    print(df["water_level"].values.tolist())
 
 def get_stat():
     json_dict = {}
@@ -80,14 +108,15 @@ def get_NBS_stat():
     # cal NBS: inflow - outflow + NBS = volumn_change_rate -> NBS = volumn_change_rate - inflow + outflow
     # print(lake_dict)
     # print(river_dict)
-
+    NBS_2017 = {}
     for lake_name in lakes_name:
         lake = gl.lakes[lake_name]
-        NBS = lake_dict[lake_name]
+        NBS:np.ndarray = lake_dict[lake_name]
         for river in lake.inflow:
             NBS -= river_dict[river.name]
         for river in lake.outflow:
             NBS += river_dict[river.name]
+        NBS_2017[lake_name] = NBS[60:72].tolist()
 
         '''
         # pearson-correlation-coefficient
@@ -105,6 +134,7 @@ def get_NBS_stat():
 
     """with open(nbs_json_path, "w") as f:
         json.dump(json_dict, f)"""
+    print(NBS_2017)
 
     
 

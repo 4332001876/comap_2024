@@ -54,9 +54,10 @@ def get_rating_curve():
             low = 0
         else:
             low = lake_dict[river.downstream_lake[0].name]
-        X = high # - np.mean(low)
-        X = np.log(X)
-        Y = np.log(flow_vector)
+        X = high - np.mean(low)
+        # X = np.log(X)
+        # Y = np.log(flow_vector)
+        Y = flow_vector
         plotting(X, Y)
 
         X = sm.add_constant(X)

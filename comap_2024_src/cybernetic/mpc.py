@@ -18,6 +18,7 @@ class MpcController:
         for action1 in legal_action[0]:
             for action2 in legal_action[1]:
                 great_lake_copy = copy.deepcopy(self.great_lake)
+                great_lake_copy.dt_nbs_std_factor = 0.00000001
                 great_lake_copy.dam_controller["stMarys"].set_action(action1)
                 great_lake_copy.dam_controller["stLawrence"].set_action(action2)
                 great_lake_copy.run(self.SIM_STEPS)
