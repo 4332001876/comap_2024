@@ -8,11 +8,11 @@ class MpcController:
     def __init__(self, great_lake: GreatLake) -> None:
         self.great_lake = great_lake
 
-        self.SIM_STEPS = 2
+        self.SIM_STEPS = 3
 
     def run_one_step(self):
         best_loss = float("inf")
-        legal_action = [dam.get_legal_action() for dam in self.great_lake.dam_controller.values()]
+        legal_action = [dam.get_legal_action(self.great_lake.dt) for dam in self.great_lake.dam_controller.values()]
         assert len(legal_action) == 2
         # dam1: stMarys; dam2: stLawrence
         for action1 in legal_action[0]:

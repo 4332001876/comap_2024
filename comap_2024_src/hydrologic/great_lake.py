@@ -25,7 +25,7 @@ class GreatLake:
 
         self.dt = 60 * 30 # s, 0.5 hours
         self.daily_discount_rate = 0.5
-        self.dt_nbs_std_factor = np.sqrt(30 * np.log(1 / self.daily_discount_rate)) * self.dt * np.log(1 / self.daily_discount_rate)
+        self.dt_nbs_std_factor = np.sqrt(30 * np.log(1 / self.daily_discount_rate)) * (self.dt / 86400) * np.log(1 / self.daily_discount_rate)
 
     def start_new_month(self, month: int):
         month = str(month)
@@ -71,6 +71,7 @@ class GreatLake:
             new_nbs = lake.nbs_mean + lake.nbs_std * self.dt_nbs_std_factor * np.random.normal() 
             alpha = self.daily_discount_rate ** (86400 / self.dt)
             lake.last_nbs = alpha * lake.last_nbs + (1 - alpha) * new_nbs
+            # print(lake.last_nbs)
             change_rate += lake.last_nbs
             amount = change_rate * self.dt
             lake.add_water(amount)

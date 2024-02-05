@@ -88,7 +88,7 @@ class River:
         else:
             low = self.downstream_lake[0].get_normalized_water_level()
 
-        self.flow = self.base_flow + self.std * (high - low)
+        self.flow = self.base_flow + self.std * (high - low) / np.sqrt(2)
 
     def set_new_base(self, flow, std) -> None:
         self.base_flow = flow
@@ -128,14 +128,33 @@ class DamController:
         m_limit(min_limit):
         """
 
-    def get_legal_action(self):
-        # change_rate_limit = self.get_change_rate_limit()
+    def get_legal_action(self, dt):
+        if self.river.flow is not None:
+            self.last_flow = self.river.flow
+        else:
+            self.last_flow = self.river.base_flow
+
+        change_rate_limit = self.get_change_rate_limit()
         max_limit = self.get_max_limit()
         min_limit = self.get_min_limit()
+
+        change = change_rate_limit * (2 * dt / (7 * 86400))
+        possible_action = [self.last_flow + change * i for i in range(-1,2)]
         if max_limit >= min_limit:
+            legal_action = []
+            for action in possible_action:
+                if action <= max_limit and action >= min_limit:
+                    legal_action.append(action)
+        else:
+            legal_action = possible_action
+
+        if len(legal_action) == 0:
+            legal_action = [self.last_flow]
+
+        """if max_limit >= min_limit:
             legal_action = np.linspace(min_limit, max_limit, self.legal_action_num)
         else:
-            legal_action = np.linspace(max_limit, min_limit, self.legal_action_num)
+            legal_action = np.linspace(max_limit, min_limit, self.legal_action_num)"""
 
         return legal_action
 
@@ -221,6 +240,9 @@ class CompensatingWorks(DamController):
     
     def get_min_limit(self):
         return 1400
+    
+    def get_change_rate_limit(self):
+        return 2000 * 0.15
 
 
 

@@ -4,7 +4,7 @@ class Config:
     def __init__(self) -> None:     
         # The following are the names of the rivers and lakes in the Great Lakes system
         # high to low, lakes_name = ["clair", "erie", "miHuron", "ontario", "superior"]
-        lakes_name = ["superior", "miHuron", "erie", "clair", "ontario"]
+        lakes_name = ["superior", "miHuron", "clair", "erie", "ontario"]
         rivers_name = ["detroit", "niagara", "stClair", "stMarys", "stLawrence"]
 
         # The following are the areas of the lakes in the Great Lakes system
