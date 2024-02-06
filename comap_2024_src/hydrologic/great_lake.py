@@ -8,7 +8,7 @@ from hydrologic.base_element import Lake, River, DamController, MosesSaunders, C
 
 import types
 
-IS_2017 = True
+IS_2017 = False
 if IS_2017:
     with open("data/flow_2017.json", "r") as f:
         flow_2017 = json.load(f)
@@ -68,7 +68,7 @@ class GreatLake:
         for river in self.rivers.values():
             base_flow = stat[river.name]["flow"][month]["mean"]
             std_flow = stat[river.name]["flow"][month]["std"]
-            river.set_new_base(base_flow, std_flow)
+            river.set_new_base(base_flow * 0.5, std_flow)
         if IS_2017:
             self.set_2017(month)
         
